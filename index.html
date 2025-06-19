@@ -1,78 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Dashboard</title>
-    <!-- BOX ICONS -->
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <!-- CUSTOM CSS -->
-    <link rel="stylesheet" href="./css/estilos.css">
-    <!-- CUSTOM JS -->
-    <script src="./js/app.js" defer></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Facturación</title>
+    <link rel="stylesheet" href="css/estilos.css" />
 </head>
 <body>
 
+<!-- 🔐 Login -->
+<div class="login-container" id="loginContainer">
+    <form id="loginForm" class="login-form">
+        <h2>🔐 Iniciar Sesión</h2>
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" required />
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" required />
+        <button type="submit">Ingresar</button>
+        <p id="errorLogin" class="error-text"></p>
+    </form>
+</div>
+
+<!-- 💼 App Principal -->
+<div id="app" style="display: none;">
     <div class="menu-dashboard">
-        <!-- TOP MENU -->
-        <div class="top-menu">
-            <div class="logo">
-                <img src="./img/logo.svg" alt="">
-                <span>TuMejorWeb</span>
-            </div>
-            <div class="toggle">
-                <i class='bx bx-menu'></i>
-            </div>
+        <div class="logo">
+            <span>🧾 Facturación</span>
         </div>
-        <!-- INPUT SEARCH -->
-        <div class="input-search">
-            <i class='bx bx-search'></i>
-            <input type="text" class="input" placeholder="Buscar">
-        </div>
-        <!-- MENU -->
         <div class="menu">
-            <div class="enlace">
-                <i class="bx bx-grid-alt"></i>
-                <span>Dashboard</span>
-            </div>
-
-            <div class="enlace">
-                <i class="bx bx-user"></i>
-                <span>Usuarios</span>
-            </div>
-
-            <div class="enlace">
-                <i class="bx bx-grid-alt"></i>
-                <span>Analíticas</span>
-            </div>
-
-            <div class="enlace">
-                <i class="bx bx-message-square"></i>
-                <span>Mensajes</span>
-            </div>
-
-            <div class="enlace">
-                <i class="bx bx-file-blank"></i>
-                <span>Archivos</span>
-            </div>
-
-            <div class="enlace">
-                <i class="bx bx-cart"></i>
-                <span>Pedidos</span>
-            </div>
-
-            <div class="enlace">
-                <i class="bx bx-heart"></i>
-                <span>Favoritos</span>
-            </div>
-
-            <div class="enlace">
-                <i class="bx bx-cog"></i>
-                <span>Configuración</span>
-            </div>
+            <div class="enlace activo" id="btnInicio">Inicio</div>
+            <div class="enlace">📄 Datos de Empresa</div>
+            <div class="enlace" id="btnVentas">📊 Información de Ventas</div>
+            <div class="enlace" id="btnCerrarSesion">🔒 Cerrar Sesión</div>
         </div>
     </div>
-    
+
+    <main class="contenido">
+        <!-- Sección Emitir Comprobante -->
+        <section id="mainComprobante">
+            <fieldset>
+                <legend>Emitir Boleta o Factura</legend>
+                <div class="tipo-comprobante">
+                    <button type="button" class="opcion-btn activo" id="btnBoleta">Boleta</button>
+                    <button type="button" class="opcion-btn" id="btnFactura">Factura</button>
+                </div>
+
+                <form id="formComprobante">
+                    <fieldset>
+                        <legend>🧑 Datos del Cliente</legend>
+                        <label id="labelDocumento">Número de DNI:</label>
+                        <input type="text" id="documento" required />
+                        <label>Razón Social:</label>
+                        <input type="text" id="razonSocial" required />
+                        <label>Dirección:</label>
+                        <input type="text" id="direccion" />
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>🛒 Detalle del Producto o Servicio</legend>
+                        <table id="tablaProductos">
+                            <thead>
+                            <tr>
+                                <th>Cantidad</th>
+                                <th>Código</th>
+                                <th>Descripción</th>
+                                <th>Precio Unitario (S/)</th>
+                                <th>Total (S/)</th>
+                            </tr>
+                            </thead>
+                            <tbody id="cuerpoProductos"></tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="4" style="text-align:right; font-weight:bold;">Total General:</td>
+                                <td id="totalGeneral">S/ 0.00</td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </fieldset>
+
+                    <div class="acciones">
+                        <button type="submit">Emitir</button>
+                    </div>
+                </form>
+            </fieldset>
+        </section>
+
+        <!-- Sección Ventas -->
+        <section id="mainVentas" style="display: none;">
+            <fieldset>
+                <legend>📊 Historial de Ventas</legend>
+                <table id="tablaVentas">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Documento</th>
+                        <th>Monto Total</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody id="cuerpoVentas"></tbody>
+                </table>
+            </fieldset>
+        </section>
+    </main>
+</div>
+
+<script src="js/app.js"></script>
 </body>
 </html>
+

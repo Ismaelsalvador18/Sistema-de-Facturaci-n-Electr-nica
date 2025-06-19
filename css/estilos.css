@@ -1,165 +1,192 @@
-/* FONTS GOOGLE */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
-
-/* VARIABLES */
-
-:root {
-    --blanco: #E0E0E0;
-    --azul-opacidad: #184463;
-    --bg-menu: #003053;
-    --bg-body: #C7E1FF;
-}
-
-/* GENERALES */
-
-*{
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Quicksand', sans-serif;
-    color: var(--blanco);
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
 }
 
-/* LAYOUT */
+/* LOGIN */
+.login-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 300px;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.login-form label {
+    font-weight: bold;
+    display: block;
+    margin-top: 1rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 0.8rem;
+    background: #003053;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* APP */
+#app {
+    display: flex;
+    height: 100vh;
+}
 
 .menu-dashboard {
-    max-width: 150px;
-    height: 100vh;
-    background: var(--bg-menu);
-    padding: 20px;
-    transition: max-width .3s ease;
+    width: 230px;
+    background: #003053;
+    color: #fff;
+    padding: 1rem;
 }
 
-.top-menu {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
 }
-
-.top-menu .logo {
-    display: flex;
-    align-items: center;
-}
-
-.top-menu .logo img {
-    width: 40px;
-    transition: width .3s ease;
-}
-
-.top-menu .logo span {
-    font-size: 20px;
-    margin-left: 20px;
-    display: none;
-}
-
-.top-menu .toggle {
-    width: 30px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-}
-
-.top-menu .toggle i {
-    font-size: 35px;
-}
-
-/* INPUT BOX */
-
-.input-search {
-    width: 100%;
-    margin: 50px 0;
-    background-color: var(--azul-opacidad);
-    padding: 15px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-}
-
-.input-search i {
-    font-size: 30px;
-    margin-right: 20px;
-}
-
-.input-search .input {
-    border: none;
-    outline: none;
-    background-color: transparent;
-    width: 100%;
-    height: 30px;
-    color: var(--blanco);
-    font-size: 22px;
-    display: none;
-}
-
-/* ENLACES MENU */
 
 .menu .enlace {
-    width: 100%;
-    padding: 20px 0 20px 17px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
     cursor: pointer;
-    font-size: 20px;
-    transition: all .3s ease;
+    padding: 0.5rem;
+    border-radius: 5px;
 }
 
-.menu .enlace:hover {
-    background: var(--azul-opacidad);
+.menu .enlace.activo {
+    background: #005fa3;
+    font-weight: bold;
 }
 
-.menu .enlace i {
-    margin-right: 20px;
-    font-size: 25px;
+.contenido {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
 }
 
-.menu .enlace span {
-    opacity: 0;
-    transition: opacity .3s ease;
+fieldset {
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background: white;
 }
 
-.menu-dashboard.open {
-    max-width: 300px;
+legend {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #0d6efd;
+    padding: 0 10px;
 }
 
-.menu-dashboard.open .top-menu .logo span {
+.tipo-comprobante {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.opcion-btn {
+    flex: 1;
+    padding: 0.8rem;
+    border: 2px solid #0d6efd;
+    background: #fff;
+    color: #0d6efd;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.opcion-btn.activo {
+    background: #0d6efd;
+    color: white;
+}
+
+label {
     display: block;
+    margin-top: 1rem;
+    font-weight: bold;
 }
 
-.menu-dashboard.open .input-search
-.menu-dashboard.open .menu .enlace {
-    width: auto;
+input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.menu-dashboard.open .input-search .input {
-    display: block;
+#tablaProductos,
+#tablaVentas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
 }
 
-.menu-dashboard.open .menu .enlace {
-    padding: 20px;
+#tablaProductos th, #tablaProductos td,
+#tablaVentas th, #tablaVentas td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: center;
 }
 
-.menu-dashboard.open .menu .enlace span {
-    opacity: 1;
+#tablaProductos input {
+    width: 100%;
+    padding: 0.4rem;
+    border: none;
+    text-align: center;
 }
 
+.acciones {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+.acciones button {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    background: #198754;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
