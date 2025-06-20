@@ -190,3 +190,30 @@ input {
     cursor: pointer;
 }
 
+.grupo-documento {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.grupo-documento input {
+    flex: 1;
+}
+
+.grupo-documento button {
+    padding: 0.5rem 1rem;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#vistaJSON pre {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+

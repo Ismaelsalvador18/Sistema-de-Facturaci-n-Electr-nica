@@ -49,7 +49,10 @@
                     <fieldset>
                         <legend>🧑 Datos del Cliente</legend>
                         <label id="labelDocumento">Número de DNI:</label>
-                        <input type="text" id="documento" required />
+                        <div class="grupo-documento">
+                            <input type="text" id="documento" required />
+                            <button type="button" id="btnBuscarDocumento">🔍 Buscar</button>
+                        </div>
                         <label>Razón Social:</label>
                         <input type="text" id="razonSocial" required />
                         <label>Dirección:</label>
@@ -61,6 +64,7 @@
                         <table id="tablaProductos">
                             <thead>
                             <tr>
+                                <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th>Código</th>
                                 <th>Descripción</th>
@@ -103,10 +107,20 @@
                 </table>
             </fieldset>
         </section>
+
+        <!-- 📦 Vista previa del JSON generado -->
+        <section id="vistaJSON" style="display: none;">
+            <fieldset>
+                <legend>📦 Vista Previa del JSON Generado</legend>
+                <pre id="jsonPreview" style="background: #f5f5f5; padding: 1rem; border-radius: 6px; max-height: 400px; overflow-y: auto;"></pre>
+            </fieldset>
+        </section>
+
     </main>
 </div>
 
 <script src="js/app.js"></script>
 </body>
 </html>
+
 
