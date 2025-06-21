@@ -9,7 +9,6 @@ body {
     background: #f0f2f5;
 }
 
-/* LOGIN */
 .login-container {
     width: 100%;
     height: 100vh;
@@ -23,7 +22,8 @@ body {
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 300px;
+    width: 100%;
+    max-width: 320px;
 }
 
 .login-form h2 {
@@ -33,8 +33,8 @@ body {
 
 .login-form label {
     font-weight: bold;
-    display: block;
     margin-top: 1rem;
+    display: block;
 }
 
 .login-form input {
@@ -64,9 +64,9 @@ body {
     margin-top: 0.5rem;
 }
 
-/* APP */
 #app {
     display: flex;
+    flex-direction: row;
     height: 100vh;
 }
 
@@ -75,12 +75,7 @@ body {
     background: #003053;
     color: #fff;
     padding: 1rem;
-}
-
-.logo {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
+    flex-shrink: 0;
 }
 
 .menu .enlace {
@@ -93,6 +88,12 @@ body {
 .menu .enlace.activo {
     background: #005fa3;
     font-weight: bold;
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
 }
 
 .contenido {
@@ -138,22 +139,31 @@ legend {
     color: white;
 }
 
-label {
-    display: block;
-    margin-top: 1rem;
-    font-weight: bold;
-}
-
 input {
     width: 100%;
     padding: 0.5rem;
-    margin-top: 0.3rem;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-#tablaProductos,
-#tablaVentas {
+.acciones {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.acciones button {
+    flex: 1;
+    padding: 0.8rem;
+    background: #198754;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#tablaProductos, #tablaVentas {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
@@ -168,36 +178,14 @@ input {
 
 #tablaProductos input {
     width: 100%;
-    padding: 0.4rem;
-    border: none;
     text-align: center;
-}
-
-.acciones {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.acciones button {
-    flex: 1;
-    padding: 0.8rem;
     border: none;
-    background: #198754;
-    color: white;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 0.4rem;
 }
 
 .grupo-documento {
     display: flex;
     gap: 0.5rem;
-    align-items: center;
-}
-
-.grupo-documento input {
-    flex: 1;
 }
 
 .grupo-documento button {
@@ -209,11 +197,109 @@ input {
     cursor: pointer;
 }
 
-#vistaJSON pre {
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    color: #333;
-    border: 1px solid #ddd;
+/* 🧠 Chat IA */
+.boton-ia {
+    background: #0d6efd;
+    border: none;
+    color: white;
+    padding: 0.6rem;
+    width: 100%;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
 }
 
+.chat-ia {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
 
+.chat-header {
+    background: #003053;
+    color: white;
+    padding: 0.5rem;
+    font-weight: bold;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-mensajes {
+    flex: 1;
+    padding: 0.5rem;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.chat-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+    flex: 1;
+    border: none;
+    padding: 0.6rem;
+    outline: none;
+}
+
+.chat-input button {
+    padding: 0.6rem 1rem;
+    border: none;
+    background: #0d6efd;
+    color: white;
+    cursor: pointer;
+}
+
+.mensaje {
+    padding: 0.4rem;
+    margin-bottom: 0.3rem;
+    border-radius: 5px;
+    max-width: 90%;
+    word-wrap: break-word;
+}
+
+.mensaje.usuario {
+    background: #d1e7dd;
+    align-self: flex-end;
+}
+
+.mensaje.ia {
+    background: #e2e3e5;
+    align-self: flex-start;
+}
+
+.oculto {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #app {
+        flex-direction: column;
+    }
+
+    .menu-dashboard {
+        width: 100%;
+    }
+
+    .chat-ia {
+        width: 100%;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+        max-height: 50vh;
+    }
+}

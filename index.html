@@ -24,14 +24,19 @@
 <!-- 💼 App Principal -->
 <div id="app" style="display: none;">
     <div class="menu-dashboard">
+
         <div class="logo">
             <span>🧾 Facturación</span>
         </div>
+
         <div class="menu">
             <div class="enlace activo" id="btnInicio">Inicio</div>
             <div class="enlace">📄 Datos de Empresa</div>
             <div class="enlace" id="btnVentas">📊 Información de Ventas</div>
             <div class="enlace" id="btnCerrarSesion">🔒 Cerrar Sesión</div>
+            <div class="enlace">
+                <button id="toggleIA" class="boton-ia">🤖 Asistente IA</button>
+            </div>
         </div>
     </div>
 
@@ -40,6 +45,7 @@
         <section id="mainComprobante">
             <fieldset>
                 <legend>Emitir Boleta o Factura</legend>
+
                 <div class="tipo-comprobante">
                     <button type="button" class="opcion-btn activo" id="btnBoleta">Boleta</button>
                     <button type="button" class="opcion-btn" id="btnFactura">Factura</button>
@@ -96,11 +102,10 @@
                 <table id="tablaVentas">
                     <thead>
                     <tr>
-                        <th>Fecha</th>
                         <th>Cliente</th>
                         <th>Documento</th>
                         <th>Monto Total</th>
-                        <th>Estado</th>
+                        <th>Fecha</th>
                     </tr>
                     </thead>
                     <tbody id="cuerpoVentas"></tbody>
@@ -117,10 +122,22 @@
         </section>
 
     </main>
+
+    <!-- 💬 Chat IA flotante -->
+    <div id="chatIA" class="chat-ia oculto">
+        <div class="chat-header">
+            Asistencia Inteligente
+            <span id="cerrarIA" title="Cerrar">✖</span>
+        </div>
+        <div class="chat-mensajes" id="mensajesIA"></div>
+        <div class="chat-input">
+            <input type="text" id="inputIA" placeholder="Escribe tu mensaje..." />
+            <button id="enviarIA">Enviar</button>
+        </div>
+    </div>
+
 </div>
 
 <script src="js/app.js"></script>
 </body>
 </html>
-
-

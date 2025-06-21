@@ -17,7 +17,7 @@ document.getElementById("btnCerrarSesion").addEventListener("click", function ()
     location.reload();
 });
 
-// --- Variables y elementos clave ---
+// --- Variables clave ---
 const btnBoleta = document.getElementById("btnBoleta");
 const btnFactura = document.getElementById("btnFactura");
 const labelDocumento = document.getElementById("labelDocumento");
@@ -52,7 +52,7 @@ btnFactura.addEventListener("click", () => {
 
 btnBoleta.click();
 
-// --- Buscar datos ---
+// --- Buscar datos desde API ---
 document.getElementById("btnBuscarDocumento").addEventListener("click", () => {
     const num = inputDocumento.value.trim();
     const tipo = tipoDoc === "01" ? "ruc" : "dni";
@@ -66,20 +66,15 @@ document.getElementById("btnBuscarDocumento").addEventListener("click", () => {
     fetch(url, {
         method: "GET",
         headers: {
-            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzODg0MiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImNvbnN1bHRvciJ9.4m1S0AkEpql3vBmLHjoZZWVNZ3zqMgVgQ1JtrRjcTk8"
+            Authorization: "Bearer TU_TOKEN_AQUI"
         }
     })
         .then(res => res.json())
         .then(j => {
             if (j.status !== 200 || !j.success) throw new Error(j.message || 'No se encontró información');
             const d = j.data;
-            if (tipo === "dni") {
-                document.getElementById("razonSocial").value = d.nombre_completo || "";
-                document.getElementById("direccion").value = d.direccion_completa || d.direccion || "";
-            } else {
-                document.getElementById("razonSocial").value = d.nombre_o_razon_social || "";
-                document.getElementById("direccion").value = d.direccion || "";
-            }
+            document.getElementById("razonSocial").value = d.nombre_completo || d.nombre_o_razon_social || "";
+            document.getElementById("direccion").value = d.direccion_completa || d.direccion || "";
         })
         .catch(err => {
             console.error(err);
@@ -87,19 +82,11 @@ document.getElementById("btnBuscarDocumento").addEventListener("click", () => {
         });
 });
 
-// --- Unidades ---
+// --- Agregar productos ---
 const unidades = [
     { codigo: "NIU", descripcion: "UNIDAD (BIENES)" },
     { codigo: "LTR", descripcion: "LITRO" },
-    { codigo: "MIL", descripcion: "MILLARES" },
-    { codigo: "KGM", descripcion: "KILOGRAMO" },
-    { codigo: "DZN", descripcion: "DOCENA" },
-    { codigo: "CA", descripcion: "LATAS" },
-    { codigo: "BG", descripcion: "BOLSA" },
-    { codigo: "GLL", descripcion: "US GALON (3,7843 L)" },
-    { codigo: "YRD", descripcion: "YARDA" },
-    { codigo: "C62", descripcion: "PIEZAS" },
-    { codigo: "ZZ", descripcion: "UNIDAD (SERVICIOS)" },
+    { codigo: "KGM", descripcion: "KILOGRAMO" }
 ];
 
 function crearFila() {
@@ -159,12 +146,10 @@ function actualizarTotales() {
 
 crearFila();
 
+// --- Envío a API del facturador ---
 function obtenerFechaPeru() {
     const hoy = new Date();
-    const año = hoy.getFullYear();
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0");
-    const dia = String(hoy.getDate()).padStart(2, "0");
-    return `${año}-${mes}-${dia}T00:00:00-05:00`;
+    return hoy.toISOString().split("T")[0] + "T00:00:00-05:00";
 }
 
 function convertirNumeroALetras(monto) {
@@ -172,21 +157,18 @@ function convertirNumeroALetras(monto) {
 }
 
 function enviarComprobante(data) {
-    fetch("https://tu-api.com/comprobantes", {
+    fetch("http://localhost:8080/facturador/send", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
-        .then(response => response.json())
-        .then(respuesta => {
-            console.log("✅ Respuesta del servidor:", respuesta);
-            alert("📤 Comprobante enviado correctamente.");
+        .then(r => r.json())
+        .then(res => {
+            alert("✅ Comprobante enviado correctamente.");
         })
-        .catch(error => {
-            console.error("❌ Error al enviar comprobante:", error);
-            alert("❌ No se pudo enviar el comprobante.");
+        .catch(err => {
+            alert("❌ Error al enviar comprobante.");
+            console.error(err);
         });
 }
 
@@ -194,7 +176,6 @@ formComprobante.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const fecha = obtenerFechaPeru();
-
     const data = {
         tipo_Operacion: "0101",
         tipo_Doc: tipoDoc,
@@ -207,26 +188,18 @@ formComprobante.addEventListener("submit", function (e) {
         cliente_Num_Doc: inputDocumento.value,
         cliente_Razon_Social: document.getElementById("razonSocial").value,
         cliente_Direccion: document.getElementById("direccion").value,
+        detalle: [],
+        forma_pago: [{ tipo: "Contado", monto: 0, cuota: 0, fecha_Pago: fecha }],
+        legend: [],
         monto_Oper_Gravadas: 0,
         monto_Igv: 0,
         total_Impuestos: 0,
         valor_Venta: 0,
         sub_Total: 0,
         monto_Imp_Venta: 0,
-        monto_Oper_Exoneradas: 0,
         estado_Documento: "0",
         manual: false,
-        id_Base_Dato: "15265",
-        detalle: [],
-        forma_pago: [
-            {
-                tipo: "Contado",
-                monto: 0,
-                cuota: 0,
-                fecha_Pago: fecha
-            }
-        ],
-        legend: []
+        id_Base_Dato: "15265"
     };
 
     const filas = cuerpo.querySelectorAll("tr");
@@ -235,7 +208,7 @@ formComprobante.addEventListener("submit", function (e) {
 
     filas.forEach(fila => {
         const [unidadCell, cantCell, codCell, descCell, precioCell] = fila.children;
-        const unidad = unidadCell.querySelector("select")?.value || "";
+        const unidad = unidadCell.querySelector("select").value;
         const cantidad = parseFloat(cantCell.querySelector("input")?.value || 0);
         const codigo = codCell.querySelector("input")?.value || "SIN-CÓDIGO";
         const descripcion = descCell.querySelector("input")?.value || "SIN-DESCRIPCIÓN";
@@ -257,7 +230,7 @@ formComprobante.addEventListener("submit", function (e) {
                 monto_Valor_Unitario: precio,
                 monto_Base_Igv: base,
                 porcentaje_Igv: 18,
-                igv: igv,
+                igv,
                 tip_Afe_Igv: "10",
                 total_Impuestos: igv,
                 monto_Precio_Unitario: totalUnitario,
@@ -265,37 +238,29 @@ formComprobante.addEventListener("submit", function (e) {
                 factor_Icbper: 0
             });
         }
-
-        enviarComprobante(data);
     });
 
     const totalVenta = +(totalBase + totalIGV).toFixed(2);
-
-    data.monto_Oper_Gravadas = totalBase;
-    data.valor_Venta = totalBase;
-    data.monto_Igv = totalIGV;
-    data.total_Impuestos = totalIGV;
-    data.sub_Total = totalVenta;
-    data.monto_Imp_Venta = totalVenta;
-    data.forma_pago[0].monto = totalVenta;
-    data.legend.push({
-        legend_Code: "1000",
-        legend_Value: convertirNumeroALetras(totalVenta)
+    Object.assign(data, {
+        monto_Oper_Gravadas: totalBase,
+        valor_Venta: totalBase,
+        monto_Igv: totalIGV,
+        total_Impuestos: totalIGV,
+        sub_Total: totalVenta,
+        monto_Imp_Venta: totalVenta,
+        forma_pago: [{ tipo: "Contado", monto: totalVenta, cuota: 0, fecha_Pago: fecha }],
+        legend: [{ legend_Code: "1000", legend_Value: convertirNumeroALetras(totalVenta) }]
     });
 
-    const vistaJSON = document.getElementById("vistaJSON");
-    const jsonPreview = document.getElementById("jsonPreview");
-    vistaJSON.style.display = "block";
-    jsonPreview.textContent = JSON.stringify(data, null, 2);
-
-    console.log("Listo para enviar a SUNAT:", data);
-    alert("📥 Comprobante generado correctamente.");
+    document.getElementById("vistaJSON").style.display = "block";
+    document.getElementById("jsonPreview").textContent = JSON.stringify(data, null, 2);
+    enviarComprobante(data);
 });
 
-// --- Navegación ---
-function activarMenu(idActivo) {
+// --- Navegación entre secciones ---
+function activarMenu(id) {
     document.querySelectorAll(".menu .enlace").forEach(el => el.classList.remove("activo"));
-    document.getElementById(idActivo).classList.add("activo");
+    document.getElementById(id).classList.add("activo");
 }
 
 document.getElementById("btnVentas").addEventListener("click", () => {
@@ -310,25 +275,48 @@ document.getElementById("btnInicio").addEventListener("click", () => {
     activarMenu("btnInicio");
 });
 
-function cargarVentas() {
-    const ventas = [
-        { fecha: "2025-06-18", cliente: "Juan Pérez", documento: "12345678", monto: 150, estado: "Emitido" },
-        { fecha: "2025-06-17", cliente: "María López", documento: "20451234567", monto: 300, estado: "Anulado" }
-    ];
+// --- Asistente IA estilo mensajería ---
+const btnToggleIA = document.getElementById("toggleIA");
+const chatIA = document.getElementById("chatIA");
+const cerrarIA = document.getElementById("cerrarIA");
+const inputIA = document.getElementById("inputIA");
+const mensajesIA = document.getElementById("mensajesIA");
+const btnEnviarIA = document.getElementById("enviarIA");
 
-    const cuerpoVentas = document.getElementById("cuerpoVentas");
-    cuerpoVentas.innerHTML = "";
-    ventas.forEach(venta => {
-        const fila = `
-        <tr>
-            <td>${venta.fecha}</td>
-            <td>${venta.cliente}</td>
-            <td>${venta.documento}</td>
-            <td>S/ ${venta.monto.toFixed(2)}</td>
-            <td>${venta.estado}</td>
-        </tr>`;
-        cuerpoVentas.innerHTML += fila;
-    });
+btnToggleIA.addEventListener("click", () => chatIA.classList.remove("oculto"));
+cerrarIA.addEventListener("click", () => chatIA.classList.add("oculto"));
+
+function agregarMensaje(texto, clase) {
+    const burbuja = document.createElement("div");
+    burbuja.className = `mensaje ${clase}`;
+    burbuja.textContent = texto;
+    mensajesIA.appendChild(burbuja);
+    mensajesIA.scrollTop = mensajesIA.scrollHeight;
 }
 
-document.addEventListener("DOMContentLoaded", cargarVentas);
+function enviarMensajeIA() {
+    const pregunta = inputIA.value.trim();
+    if (!pregunta) return;
+    agregarMensaje(pregunta, "usuario");
+    inputIA.value = "";
+
+    fetch("https://api.tu-servicio.com/ia", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensaje: pregunta })
+    })
+        .then(res => res.json())
+        .then(data => {
+            agregarMensaje(data.respuesta || "🤖 No entendí tu pregunta.", "ia");
+        })
+        .catch(() => agregarMensaje("❌ Error al conectar con la IA.", "ia"));
+}
+
+btnEnviarIA.addEventListener("click", enviarMensajeIA);
+inputIA.addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        enviarMensajeIA();
+    }
+});
+
