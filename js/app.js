@@ -49,7 +49,6 @@ btnFactura.addEventListener("click", () => {
     inputDocumento.placeholder = "Ingrese RUC";
     inputDocumento.maxLength = 11;
 });
-
 btnBoleta.click();
 
 // --- Buscar datos desde API ---
@@ -59,19 +58,19 @@ document.getElementById("btnBuscarDocumento").addEventListener("click", () => {
 
     if (!num) return alert("⚠️ Ingresa un número.");
     if ((tipo === "dni" && num.length !== 8) || (tipo === "ruc" && num.length !== 11)) {
-        return alert(`⚠️ ${tipo.toUpperCase()} debe tener ${tipo === "dni" ? 8 : 11} dígitos.`);
+        return alert(`${tipo.toUpperCase()} debe tener ${tipo === "dni" ? 8 : 11} dígitos.`);
     }
 
     const url = `https://api.factiliza.com/v1/${tipo}/info/${num}`;
     fetch(url, {
         method: "GET",
         headers: {
-            Authorization: "Bearer TU_TOKEN_AQUI"
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzODg0MiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImNvbnN1bHRvciJ9.4m1S0AkEpql3vBmLHjoZZWVNZ3zqMgVgQ1JtrRjcTk8"
         }
     })
         .then(res => res.json())
         .then(j => {
-            if (j.status !== 200 || !j.success) throw new Error(j.message || 'No se encontró información');
+            if (j.status !== 200 || !j.success) throw new Error(j.message || "No se encontró información");
             const d = j.data;
             document.getElementById("razonSocial").value = d.nombre_completo || d.nombre_o_razon_social || "";
             document.getElementById("direccion").value = d.direccion_completa || d.direccion || "";
@@ -86,9 +85,10 @@ document.getElementById("btnBuscarDocumento").addEventListener("click", () => {
 const unidades = [
     { codigo: "NIU", descripcion: "UNIDAD (BIENES)" },
     { codigo: "LTR", descripcion: "LITRO" },
-    { codigo: "KGM", descripcion: "KILOGRAMO" }
+    { codigo: "KGM", descripcion: "KILOGRAMO" },
+    { codigo: "DZN", descripcion: "DOCENA" },
+    { codigo: "ZZ", descripcion: "UNIDAD (SERVICIOS)" }
 ];
-
 function crearFila() {
     const fila = document.createElement("tr");
 
@@ -143,7 +143,6 @@ function actualizarTotales() {
         if (!vacia) crearFila();
     }
 }
-
 crearFila();
 
 // --- Envío a API del facturador ---
@@ -157,7 +156,7 @@ function convertirNumeroALetras(monto) {
 }
 
 function enviarComprobante(data) {
-    fetch("http://localhost:8080/facturador/send", {
+    fetch("https://backend-facturador.rj.r.appspot.com/facturador/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -171,7 +170,6 @@ function enviarComprobante(data) {
             console.error(err);
         });
 }
-
 formComprobante.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -179,8 +177,8 @@ formComprobante.addEventListener("submit", function (e) {
     const data = {
         tipo_Operacion: "0101",
         tipo_Doc: tipoDoc,
-        serie: tipoDoc === "01" ? "F001" : "B001",
-        correlativo: "1",
+        serie: tipoDoc === "01" ? "" : "",
+        correlativo: "",
         tipo_Moneda: "PEN",
         fecha_Emision: fecha,
         empresa_Ruc: "20607086215",
@@ -297,13 +295,15 @@ function agregarMensaje(texto, clase) {
 function enviarMensajeIA() {
     const pregunta = inputIA.value.trim();
     if (!pregunta) return;
+
     agregarMensaje(pregunta, "usuario");
     inputIA.value = "";
 
-    fetch("https://api.tu-servicio.com/ia", {
+    //YA NO HAY IA PORQUE PROVOCAVA ERRORES EN EL BACKEND SE IMPLEMENTARA LUEGO
+    fetch("https://backend-facturador.rj.r.appspot.com/ia/pregunta", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mensaje: pregunta })
+        body: JSON.stringify({ pregunta })
     })
         .then(res => res.json())
         .then(data => {
@@ -312,6 +312,45 @@ function enviarMensajeIA() {
         .catch(() => agregarMensaje("❌ Error al conectar con la IA.", "ia"));
 }
 
+let URLpdf = "";
+
+document.getElementById("btnGenerarBoleta").addEventListener("click", async () => {
+    try {
+        const response = await fetch("https://backend-facturador.rj.r.appspot.com/facturador/devolver", {
+            method: "GET"
+        });
+
+        if (!response.ok) {
+            throw new Error("No se pudo obtener el PDF");
+        }
+
+        const blob = await response.blob();
+        const pdfURL = URL.createObjectURL(blob);
+        URLpdf = pdfURL;
+        // Mostrar en el contenedor
+        const pdfContainer = document.getElementById("pdfContainer");
+        pdfContainer.innerHTML = `
+            <iframe src="${pdfURL}" width="100%" height="600px" style="border:1px solid #ccc;"></iframe>
+        `;
+
+        // Guardar la URL temporal para descarga posterior
+        const descargarBtn = document.getElementById("btnDescargarPdf");
+        descargarBtn.style.display = "inline-block";
+        descargarBtn.onclick = () => {
+            const link = document.createElement("a");
+            link.href = pdfURL;
+            link.download = "comprobante.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+    } catch (error) {
+        console.error("Error al generar o mostrar el PDF:", error);
+        alert("Hubo un error al obtener el comprobante PDF");
+    }
+});
+
 btnEnviarIA.addEventListener("click", enviarMensajeIA);
 inputIA.addEventListener("keypress", e => {
     if (e.key === "Enter") {
@@ -319,4 +358,19 @@ inputIA.addEventListener("keypress", e => {
         enviarMensajeIA();
     }
 });
+
+const whatsappBtn = document.getElementById("btnWhatsappPdf");
+whatsappBtn.style.display = "inline-block";
+
+whatsappBtn.onclick = () => {
+    const telefono = prompt("📞 Ingresa el número de WhatsApp del cliente (sin + ni espacios):");
+    if (!telefono || !/^\d{9}$/.test(telefono)) {
+        alert("❌ Número no válido. Debe tener 9 dígitos.");
+        return;
+    }
+
+    const mensaje = `Hola, aquí está su comprobante electrónico: ${URLpdf}`;
+    const enlace = `https://api.whatsapp.com/send?phone=51${telefono}&text=${encodeURIComponent(mensaje)}`;
+    window.open(enlace, "_blank");
+};
 

@@ -1,34 +1,96 @@
+/* --- CSS Moderno con Azul Opaco, Gris Claro y Blanco Opaco --- */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background: #f0f2f5;
+:root {
+    --bg-color: #fdfdfd;
+    --text-color: #1c1c1c;
+    --accent-color: #2b4c7e;
+    --card-bg: #f0f2f5;
+    --menu-bg: #2b4c7e;
+    --menu-text: #ffffff;
+    --btn-verde: #3d6f55;
+    --btn-verde-hover: #2e5b44;
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1c1c1c;
+        --text-color: #ffffff;
+        --accent-color: #4b77be;
+        --card-bg: #2a2a2a;
+        --menu-bg: #000000;
+        --menu-text: #ffffff;
+        --btn-verde: #295c43;
+        --btn-verde-hover: #1f4733;
+    }
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Botones de acción verdes */
+.btn-verde {
+    padding: 0.8rem 1.5rem;
+    background: var(--btn-verde);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-verde:hover {
+    background: var(--btn-verde-hover);
+}
+.btn-buscar {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-buscar:hover {
+    background-color: #d5d5d5;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* LOGIN */
 .login-container {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: var(--card-bg);
 }
 
 .login-form {
-    background: white;
+    background: var(--bg-color);
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     width: 100%;
-    max-width: 320px;
+    max-width: 340px;
 }
 
 .login-form h2 {
     text-align: center;
     margin-bottom: 1rem;
+    color: var(--accent-color);
 }
 
 .login-form label {
@@ -42,19 +104,24 @@ body {
     padding: 0.5rem;
     margin-top: 0.3rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 .login-form button {
     width: 100%;
     padding: 0.8rem;
-    background: #003053;
-    color: white;
+    background: var(--accent-color);
+    color: #fff;
     border: none;
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 1rem;
+    transition: background 0.3s;
+}
+
+.login-form button:hover {
+    background: #3a5c91;
 }
 
 .error-text {
@@ -64,18 +131,27 @@ body {
     margin-top: 0.5rem;
 }
 
+/* LAYOUT */
 #app {
     display: flex;
+    min-height: 100vh;
+    width: 100%;
     flex-direction: row;
-    height: 100vh;
+    flex-wrap: nowrap;
 }
 
 .menu-dashboard {
-    width: 230px;
-    background: #003053;
-    color: #fff;
+    width: 100vw;
+    background-color: var(--menu-bg);
+    color: var(--menu-text);
     padding: 1rem;
     flex-shrink: 0;
+}
+
+@media (min-width: 769px) {
+    .menu-dashboard {
+        width: 230px;
+    }
 }
 
 .menu .enlace {
@@ -83,10 +159,12 @@ body {
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 5px;
+    transition: background 0.3s;
 }
 
+.menu .enlace:hover,
 .menu .enlace.activo {
-    background: #005fa3;
+    background: #3a5c91;
     font-weight: bold;
 }
 
@@ -96,24 +174,29 @@ body {
     margin-bottom: 2rem;
 }
 
+/* CONTENIDO */
 .contenido {
     flex: 1;
+    max-width: 1000px;
+    margin: 0 auto;
     padding: 2rem;
-    overflow-y: auto;
+    overflow-x: auto;
+    width: 100%;
 }
 
+/* FORMULARIOS Y BOTONES */
 fieldset {
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 6px;
     padding: 1rem;
     margin-bottom: 1.5rem;
-    background: white;
+    background: var(--card-bg);
 }
 
 legend {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #0d6efd;
+    color: var(--accent-color);
     padding: 0 10px;
 }
 
@@ -121,56 +204,95 @@ legend {
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 .opcion-btn {
     flex: 1;
     padding: 0.8rem;
-    border: 2px solid #0d6efd;
-    background: #fff;
-    color: #0d6efd;
+    border: 2px solid var(--accent-color);
+    background: white;
+    color: var(--accent-color);
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
+    transition: background 0.3s, color 0.3s;
 }
 
-.opcion-btn.activo {
-    background: #0d6efd;
+.opcion-btn.activo,
+.opcion-btn:hover {
+    background: var(--accent-color);
     color: white;
 }
+.fila-busqueda {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
 
-input {
+.fila-busqueda input {
+    flex: 1;
+}
+
+.fila-busqueda button {
+    white-space: nowrap;
+}
+
+input,
+select {
     width: 100%;
     padding: 0.5rem;
+    margin-top: 0.3rem;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
+.grupo-documento {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.grupo-documento label,
+.grupo-documento input {
+    width: 100%;
+}
+
+.grupo-documento button {
+    padding: 0.5rem 1rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.grupo-documento button:hover {
+    background: #3a5c91;
+}
+
 .acciones {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1.5rem;
+    justify-content: flex-end;
 }
 
-.acciones button {
-    flex: 1;
-    padding: 0.8rem;
-    background: #198754;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#tablaProductos, #tablaVentas {
+/* TABLAS */
+#tablaProductos,
+#tablaVentas {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    background: var(--card-bg);
 }
 
-#tablaProductos th, #tablaProductos td,
-#tablaVentas th, #tablaVentas td {
+#tablaProductos th,
+#tablaProductos td,
+#tablaVentas th,
+#tablaVentas td {
     border: 1px solid #ccc;
     padding: 0.5rem;
     text-align: center;
@@ -183,23 +305,9 @@ input {
     padding: 0.4rem;
 }
 
-.grupo-documento {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.grupo-documento button {
-    padding: 0.5rem 1rem;
-    background: #0d6efd;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* 🧠 Chat IA */
+/* CHAT IA */
 .boton-ia {
-    background: #0d6efd;
+    background: var(--accent-color);
     border: none;
     color: white;
     padding: 0.6rem;
@@ -208,25 +316,31 @@ input {
     font-weight: bold;
     cursor: pointer;
     margin-top: 1rem;
+    transition: background 0.3s;
+}
+
+.boton-ia:hover {
+    background: #3a5c91;
 }
 
 .chat-ia {
     position: fixed;
-    right: 20px;
+    left: 20px;
     bottom: 20px;
-    width: 300px;
-    background: white;
+    width: 400px;
+    max-height: 60vh;
+    background: var(--card-bg);
     border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     z-index: 1000;
 }
 
 .chat-header {
-    background: #003053;
-    color: white;
+    background: var(--menu-bg);
+    color: var(--menu-text);
     padding: 0.5rem;
     font-weight: bold;
     border-top-left-radius: 8px;
@@ -240,7 +354,6 @@ input {
     flex: 1;
     padding: 0.5rem;
     overflow-y: auto;
-    max-height: 300px;
 }
 
 .chat-input {
@@ -258,9 +371,14 @@ input {
 .chat-input button {
     padding: 0.6rem 1rem;
     border: none;
-    background: #0d6efd;
+    background: var(--accent-color);
     color: white;
     cursor: pointer;
+    transition: background 0.3s;
+}
+
+.chat-input button:hover {
+    background: #3a5c91;
 }
 
 .mensaje {
@@ -285,21 +403,37 @@ input {
     display: none;
 }
 
-/* Responsive */
+#cerrarIA {
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+#cerrarIA:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
     #app {
         flex-direction: column;
     }
 
-    .menu-dashboard {
-        width: 100%;
+    .acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .contenido {
+        padding: 1rem;
     }
 
     .chat-ia {
         width: 100%;
-        right: 0;
+        left: 0;
         bottom: 0;
         border-radius: 0;
-        max-height: 50vh;
     }
 }

@@ -24,19 +24,13 @@
 <!-- 💼 App Principal -->
 <div id="app" style="display: none;">
     <div class="menu-dashboard">
-
-        <div class="logo">
-            <span>🧾 Facturación</span>
-        </div>
-
+        <div class="logo"><span>🧾 Facturación</span></div>
         <div class="menu">
             <div class="enlace activo" id="btnInicio">Inicio</div>
             <div class="enlace">📄 Datos de Empresa</div>
             <div class="enlace" id="btnVentas">📊 Información de Ventas</div>
             <div class="enlace" id="btnCerrarSesion">🔒 Cerrar Sesión</div>
-            <div class="enlace">
-                <button id="toggleIA" class="boton-ia">🤖 Asistente IA</button>
-            </div>
+            <div class="enlace" id="toggleIA">🤖 Asistente IA</div>
         </div>
     </div>
 
@@ -55,9 +49,9 @@
                     <fieldset>
                         <legend>🧑 Datos del Cliente</legend>
                         <label id="labelDocumento">Número de DNI:</label>
-                        <div class="grupo-documento">
+                        <div class="fila-busqueda">
                             <input type="text" id="documento" required />
-                            <button type="button" id="btnBuscarDocumento">🔍 Buscar</button>
+                            <button type="button" id="btnBuscarDocumento" class="btn-buscar">🔍 Buscar</button>
                         </div>
                         <label>Razón Social:</label>
                         <input type="text" id="razonSocial" required />
@@ -66,7 +60,7 @@
                     </fieldset>
 
                     <fieldset>
-                        <legend>🛒 Detalle del Producto o Servicio</legend>
+                        <legend>💼 Detalle del Producto o Servicio</legend>
                         <table id="tablaProductos">
                             <thead>
                             <tr>
@@ -88,9 +82,20 @@
                         </table>
                     </fieldset>
 
+                    <!-- Acciones -->
                     <div class="acciones">
-                        <button type="submit">Emitir</button>
+                        <div style="width: 100%; margin-bottom: 1rem;">
+                            <button type="submit" class="btn-verde" style="width: 100%;">Emitir</button>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                            <button type="button" id="btnGenerarBoleta" class="btn-verde">🧾 Generar Boleta</button>
+                            <button type="button" id="btnDescargarPdf" class="btn-verde" style="display:none;">⬇️ Descargar PDF</button>
+                            <button type="button" id="btnWhatsappPdf" class="btn-verde" style="display:none;">📲 Enviar por WhatsApp</button>
+                        </div>
                     </div>
+
+                    <!-- PDF -->
+                    <div id="pdfContainer" style="margin-top: 20px;"></div>
                 </form>
             </fieldset>
         </section>
@@ -102,10 +107,11 @@
                 <table id="tablaVentas">
                     <thead>
                     <tr>
+                        <th>Fecha</th>
                         <th>Cliente</th>
                         <th>Documento</th>
                         <th>Monto Total</th>
-                        <th>Fecha</th>
+                        <th>Estado</th>
                     </tr>
                     </thead>
                     <tbody id="cuerpoVentas"></tbody>
@@ -113,17 +119,16 @@
             </fieldset>
         </section>
 
-        <!-- 📦 Vista previa del JSON generado -->
+        <!-- Vista JSON -->
         <section id="vistaJSON" style="display: none;">
             <fieldset>
                 <legend>📦 Vista Previa del JSON Generado</legend>
                 <pre id="jsonPreview" style="background: #f5f5f5; padding: 1rem; border-radius: 6px; max-height: 400px; overflow-y: auto;"></pre>
             </fieldset>
         </section>
-
     </main>
 
-    <!-- 💬 Chat IA flotante -->
+    <!-- 💬 Chat IA -->
     <div id="chatIA" class="chat-ia oculto">
         <div class="chat-header">
             Asistencia Inteligente
@@ -135,7 +140,6 @@
             <button id="enviarIA">Enviar</button>
         </div>
     </div>
-
 </div>
 
 <script src="js/app.js"></script>
