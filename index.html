@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema de Facturación</title>
     <link rel="stylesheet" href="css/estilos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -31,13 +32,14 @@
             <div class="enlace" id="btnVentas">📊 Información de Ventas</div>
             <div class="enlace" id="btnCerrarSesion">🔒 Cerrar Sesión</div>
             <div class="enlace" id="toggleIA">🤖 Asistente IA</div>
+            <div class="marca-flotante">FacturaPe</div>
         </div>
     </div>
 
     <main class="contenido">
         <!-- Sección Emitir Comprobante -->
         <section id="mainComprobante">
-            <fieldset>
+            <fieldset class="bloque-formulario">
                 <legend>Emitir Boleta o Factura</legend>
 
                 <div class="tipo-comprobante">
@@ -100,24 +102,47 @@
             </fieldset>
         </section>
 
-        <!-- Sección Ventas -->
         <section id="mainVentas" style="display: none;">
-            <fieldset>
-                <legend>📊 Historial de Ventas</legend>
-                <table id="tablaVentas">
-                    <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Documento</th>
-                        <th>Monto Total</th>
-                        <th>Estado</th>
-                    </tr>
-                    </thead>
-                    <tbody id="cuerpoVentas"></tbody>
-                </table>
+            <fieldset class="bloque-formulario">
+                <legend>📊 Información de Ventas</legend>
+
+                <!-- Fieldset: Tabla de Ventas -->
+                <fieldset style="margin-bottom: 1.5rem;">
+                    <legend>📄 Historial de Ventas</legend>
+                    <table id="tablaVentas">
+                        <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Documento</th>
+                            <th>Monto Total</th>
+                            <th>Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody id="cuerpoVentas"></tbody>
+                    </table>
+                </fieldset>
+
+                <!-- Fieldset: Gráfico de Ventas -->
+                <fieldset>
+                    <legend id="tituloGrafico">📈 Gráfico de Ventas del Día</legend>
+                    <div class="botones-periodo">
+                        <div class="grupo-izquierda">
+                            <button class="btn-verde" onclick="cambiarPeriodo('dia')">Día</button>
+                            <button class="btn-verde" onclick="cambiarPeriodo('semana')">Semana</button>
+                            <button class="btn-verde" onclick="cambiarPeriodo('mes')">Mes</button>
+                            <button class="btn-verde" onclick="cambiarPeriodo('año')">Año</button>
+                        </div>
+                        <button class="btn-verde btn-comparar" onclick="toggleComparacion()">Comparar con anterior</button>
+                    </div>
+                    <canvas id="ventasChart" style="width: 100%; max-width: 100%; height: auto;"></canvas>
+                </fieldset>
+
             </fieldset>
         </section>
+
+
+
 
         <!-- Vista JSON -->
         <section id="vistaJSON" style="display: none;">
@@ -143,5 +168,6 @@
 </div>
 
 <script src="js/app.js"></script>
+<script src=" js/Grafico.js"></script>
 </body>
 </html>
